@@ -1,0 +1,123 @@
+/* reset */
+@charset "utf-8";
+/* CSS Document */
+body,
+div,
+ol,
+ul,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+th,
+header,
+main,
+section,
+td,
+dl,
+dd,
+form,
+fieldset,
+legend,
+button,
+input,
+textarea,
+select {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+button {
+  border: none;
+}
+li {
+  list-style: none;
+}
+a {
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: none;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+b,
+strong {
+  font-weight: normal;
+  font-style: normal;
+}
+i,
+em {
+  font-style: normal;
+}
+img {
+  border: 0;
+}
+input {
+  outline: none;
+  border: none;
+}
+.clearfix:after {
+  content: " ";
+  display: block;
+  height: 0;
+  overflow: hidden;
+  clear: both;
+}
+body::-webkit-scrollbar {
+  width: 0px !important;
+}
+
+body::-webkit-scrollbar {
+  display: none !important;
+}
+
+/* end reset */
+
+html {
+  font-size: calc(100vw / 3.75) !important;
+  font-family: Helvetica Neue, Helvetica, Arial, PingFang SC, Hiragino Sans GB,
+    Lantinghei SC, Microsoft YaHei, Source Han Sans CN, Heiti SC,
+    WenQuanYi Micro Hei, sans-serif, DIN;
+}
+
+/* 处理移动端刘海屏 */
+body {
+  padding-top: constant(safe-area-inset-top);
+  padding-top: env(safe-area-inset-top);
+  /* padding-bottom: constant(safe-area-inset-bottom);
+   padding-bottom: env(safe-area-inset-bottom); */
+  padding-left: constant(safe-area-inset-left);
+  padding-left: env(safe-area-inset-left);
+  padding-right: constant(safe-area-inset-right);
+  padding-right: env(safe-area-inset-right);
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  height: 100%;
+  /* ios禁止长按与选择 */
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  /* ios页面滚动不顺畅 */
+  -webkit-overflow-scrolling: touch;
+  overflow: hidden;
+  overflow-y: auto;
+  user-select: none;
+}
+#root {
+  /* display: flex; */
+  font-size: 0.16rem;
+}
+* {
+  touch-action: auto;
+}
