@@ -63,5 +63,5 @@
     "@types/react-router-dom": "^5.3.2",
     "cross-env": "^7.0.3"
   },
-  "proxy": "https://wx-test.cgws.com"
+  "proxy": ""
 }
