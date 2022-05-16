@@ -38,7 +38,7 @@
     "start": "cross-env REACT_APP_ENV=dev react-app-rewired start",
     "build:dev": "cross-env REACT_APP_ENV=dev react-app-rewired build",
     "build:test": "cross-env REACT_APP_ENV=test react-app-rewired build",
-    "build:pro": "cross-env REACT_APP_ENV=pro react-app-rewired build",
+    "build": "cross-env REACT_APP_ENV=pro react-app-rewired build",
     "test": "react-app-rewired test",
     "eject": "react-scripts eject"
   },
@@ -65,5 +65,6 @@
     "@types/react-router-dom": "^5.3.2",
     "cross-env": "^7.0.3"
   },
+  "homepage":".",
   "proxy": ""
 }

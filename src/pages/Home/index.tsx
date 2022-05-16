@@ -3,7 +3,7 @@
  * @Author: Gooyh
  * @Date: 2021-12-09 13:56:51
  * @LastEditors: Gooyh
- * @LastEditTime: 2021-12-13 10:34:11
+ * @LastEditTime: 2022-05-16 10:12:11
  */
 
 import { useDispatch, useSelector } from "react-redux";
@@ -25,7 +25,7 @@ const Home = (props: any) => {
         callback: callback,
       },
     });
-    // props.history.push("/login");
+    props.history.push("/login");
   };
 
   const callback = (res: any) => {
