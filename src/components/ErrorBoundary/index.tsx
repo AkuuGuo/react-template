@@ -1,37 +1,71 @@
-/*
- * @Description: 😊
- * @Author: Gooyh
- * @Date: 2021-12-09 14:27:14
- * @LastEditors: Gooyh
- * @LastEditTime: 2021-12-10 09:58:59
- */
-import React, { ErrorInfo } from "react";
+import { Component, ErrorInfo } from "react";
+import { notFound } from "../../assets/images";
+import { Redirect } from "react-router";
+import styles from "./styles.module.scss";
 
 interface AppProps {}
 interface AppState {
-  hasError: boolean;
+  hasError: false;
+  error: any;
+  redirect: boolean;
 }
-
-class ErrorBoundary extends React.Component<AppProps, AppState> {
+class ErrorBoundary extends Component<AppProps, AppState> {
   constructor(props: AppProps) {
     super(props);
-    this.state = { hasError: false };
+    this.state = {
+      hasError: false,
+      error: {},
+      redirect: false,
+    };
+  }
+  static getDerivedStateFromError(error: any) {
+    return { hasError: true, error };
   }
 
-  static getDerivedStateFromError(error: Error) {
-    // 更新 state 使下一次渲染能够显示降级后的 UI
-    return { hasError: true };
+  // 神策埋点上报
+  componentDidCatch(error: Error, info: ErrorInfo) {
+    console.log("ErrorBoundary caught an error", error, info);
   }
 
-  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    // 你同样可以将错误日志上报给服务器
-    // logErrorToMyService(error, errorInfo);
+  componentDidMount() {
+    window.addEventListener(
+      "error",
+      (e) => {
+        console.log(e, "WebError=========>>>>>>>");
+      },
+      true
+    );
   }
-
-  render() {
+  componentDidUpdate() {
     if (this.state.hasError) {
-      // 你可以自定义降级后的 UI 并渲染
-      return <h1>Something went wrong...</h1>;
+      setTimeout(() => this.setState({ redirect: true }), 5000);
+    }
+  }
+  handleClick() {
+    window.location.reload();
+  }
+  render() {
+    const { error, hasError, redirect } = this.state;
+    if (redirect) {
+      return <Redirect to="/home" />;
+    }
+
+    if (hasError) {
+      return (
+        <div className={styles.networkdelay}>
+          <div
+            onClick={this.handleClick}
+            className={styles.networkwapper}
+            style={{ backgroundImage: `url(${notFound}) ` }}
+          >
+            {error.name === "ChunkLoadError" ? (
+              <p>应用程序已更新，点击重新加载~</p>
+            ) : (
+              <p>前方拥堵，点击重新加载~</p>
+            )}
+          </div>
+        </div>
+      );
     }
 
     return this.props.children;

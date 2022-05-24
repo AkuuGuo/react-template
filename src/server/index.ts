@@ -3,13 +3,14 @@
  * @Author: Gooyh
  * @Date: 2021-12-10 11:08:02
  * @LastEditors: Gooyh
- * @LastEditTime: 2021-12-13 09:12:44
+ * @LastEditTime: 2022-05-24 16:58:45
  */
 import { call, delay, race } from "@redux-saga/core/effects";
 import axios, { AxiosError, AxiosStatic, Method } from "axios";
 import { get } from "lodash";
 import { assembleConfig, processErrMsg, parseResponse } from "./serverUtils";
 import { ErrorCode } from "../constants";
+import Toast from "../components/LoadingToast";
 
 // 扩展原有模块
 declare module "axios" {
@@ -22,7 +23,7 @@ export interface RequestPayload {
   path: string;
   method?: Method;
   body?: any;
-  headers?: Object | any;
+  header?: Object | any;
   showLoading?: Boolean;
   showError?: Boolean;
   timeout?: number;
@@ -45,6 +46,7 @@ export interface Result {
  * @param {function} callback 成功回调
  *
  */
+let serviceCount = 0; // 计算请求数 控制后请求先响应 提前关闭了loading
 // 组装请求
 function* fetchServerDataSaga(payload: RequestPayload) {
   const {
@@ -54,13 +56,20 @@ function* fetchServerDataSaga(payload: RequestPayload) {
     callback,
     errCallback,
   } = payload;
+
+  if (showLoading) {
+    if (serviceCount === 0) {
+      // 在此处开启loading
+      Toast.loading("加载中", 0, undefined, true);
+    }
+    serviceCount++;
+  }
+
   const config = assembleConfig(payload);
   let result: Result = {
     error: undefined,
     data: undefined,
   };
-  // 显示loading
-  showLoading && console.log("Toast加载提示...");
   // break 跳出逻辑
   do {
     let task: {
@@ -94,11 +103,18 @@ function* fetchServerDataSaga(payload: RequestPayload) {
     result = parseResponse(responseBody);
   } while (false);
 
-  // 结束loading
-  showLoading && console.log("结束Toast...");
+  if (showLoading) {
+    serviceCount--;
+    if (serviceCount === 0) {
+      // 在此处关闭loading
+      // console.log("所有请求结束关闭loading......");
+      showLoading && Toast.hide();
+    }
+  }
+
   if (result.error) {
     // 做一些错误处理 弹窗tip
-    showError && result.error.message && console.log("error tip...");
+    showError && result.error.message && Toast.fail(result.error.message, 3);
     try {
       // 错误回调
       errCallback && errCallback(result.error);
@@ -122,33 +138,3 @@ function* fetchServerDataSaga(payload: RequestPayload) {
 }
 
 export default fetchServerDataSaga;
-
-// const instance = axios.create({
-//   baseURL: "https://some-domain.com/api/",
-//   timeout: 1000,
-//   headers: { "X-Custom-Header": "foobar" },
-// });
-
-// // 添加请求拦截器
-// instance.interceptors.request.use(
-//   function (config) {
-//     // 在发送请求之前做些什么
-//     return config;
-//   },
-//   function (error) {
-//     // 对请求错误做些什么
-//     return Promise.reject(error);
-//   }
-// );
-
-// // 添加响应拦截器
-// instance.interceptors.response.use(
-//   function (response) {
-//     // 对响应数据做点什么
-//     return response;
-//   },
-//   function (error) {
-//     // 对响应错误做点什么
-//     return Promise.reject(error);
-//   }
-// );

@@ -3,12 +3,13 @@
  * @Author: Gooyh
  * @Date: 2021-12-10 16:45:21
  * @LastEditors: Gooyh
- * @LastEditTime: 2021-12-13 10:32:35
+ * @LastEditTime: 2022-05-24 17:01:43
  */
 import { AxiosError, AxiosRequestConfig } from "axios";
 import { map, get } from "lodash";
 import { RequestPayload, Result } from ".";
 import { ErrorCode, SUCCEED, baseURL } from "../constants";
+import buildHeader from "./buildHeader";
 
 // 处理get请求地址栏拼接
 export function encodeURLBody(body: any): string {
@@ -22,6 +23,9 @@ export function encodeURLBody(body: any): string {
 // 组装config
 export function assembleConfig(payload: RequestPayload): AxiosRequestConfig {
   const { path, method, body } = payload;
+
+  // 请根据业务要求实现generateHeader函数
+  const requestHeader = buildHeader(payload);
 
   let url: string = path;
   let requestBody = null;
@@ -40,6 +44,7 @@ export function assembleConfig(payload: RequestPayload): AxiosRequestConfig {
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
+      ...requestHeader,
     },
     data: requestBody,
   };

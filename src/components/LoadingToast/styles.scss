@@ -1,0 +1,72 @@
+$toastPrefixCls: my-toast;
+
+.#{$toastPrefixCls} {
+  position: fixed;
+  width: 100%;
+  z-index: 1000;
+
+  color: #ffffff;
+  text-align: center;
+
+  > span {
+    background-color: rgba($color: #333333, $alpha: 0.6);
+    border-radius: 0.04rem;
+  }
+
+  &-mask {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    left: 0;
+    top: 0;
+    transform: translateZ(1px);
+  }
+  &-success {
+    padding: 0.2rem 0.2rem;
+    min-width: 0.8rem;
+    max-width: 2.8rem;
+    font-size: 0.17rem;
+    line-height: 0.24rem;
+    img {
+      margin-bottom: 0.1rem;
+      width: 0.24rem;
+      height: 0.24rem;
+    }
+    .my-toast-text-info {
+      text-align: left;
+    }
+  }
+  &-fail {
+    padding: 0.2rem 0.2rem;
+    font-size: 0.17rem;
+    min-width: 0.8rem;
+    max-width: 2.8rem;
+    line-height: 0.24rem;
+    word-wrap: break-word;
+
+    img {
+      margin-bottom: 0.1rem;
+      width: 0.24rem;
+      height: 0.24rem;
+    }
+    .my-toast-text-info {
+      text-align: left;
+    }
+  }
+  &-loading {
+    // padding: 0.4rem 0.5rem;
+    width: 0.9rem;
+    height: 0.9rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.17rem;
+    line-height: 0.24rem;
+    img {
+      // margin-bottom: 0.2rem;
+      width: 0.4rem;
+      height: 0.12rem;
+    }
+  }
+}
