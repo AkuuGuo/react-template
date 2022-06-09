@@ -3,8 +3,9 @@
  * @Author: Gooyh
  * @Date: 2021-12-09 11:23:47
  * @LastEditors: Gooyh
- * @LastEditTime: 2021-12-10 11:23:53
+ * @LastEditTime: 2022-06-09 10:16:26
  */
+import "react-app-polyfill/stable";
 import { Suspense } from "react";
 import ReactDOM from "react-dom";
 import { HashRouter } from "react-router-dom";

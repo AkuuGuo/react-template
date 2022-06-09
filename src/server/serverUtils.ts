@@ -3,7 +3,7 @@
  * @Author: Gooyh
  * @Date: 2021-12-10 16:45:21
  * @LastEditors: Gooyh
- * @LastEditTime: 2022-05-24 17:01:43
+ * @LastEditTime: 2022-06-09 10:20:41
  */
 import { AxiosError, AxiosRequestConfig } from "axios";
 import { map, get } from "lodash";
@@ -20,6 +20,10 @@ export function encodeURLBody(body: any): string {
   return urlParam;
 }
 
+const toStringTypeof = (data: unknown | [] | string): string => {
+  return Object.prototype.toString.call(data);
+};
+
 // 组装config
 export function assembleConfig(payload: RequestPayload): AxiosRequestConfig {
   const { path, method, body } = payload;
@@ -27,12 +31,24 @@ export function assembleConfig(payload: RequestPayload): AxiosRequestConfig {
   // 请根据业务要求实现generateHeader函数
   const requestHeader = buildHeader(payload);
 
-  let url: string = path;
+  // `data` 是作为请求主体被发送的数据
+  // 只适用于这些请求方法 'PUT', 'POST', 和 'PATCH'
+  // 在没有设置 `transformRequest` 时，必须是以下类型之一：
+  // - string, plain object, ArrayBuffer, ArrayBufferView, URLSearchParams
+  // - 浏览器专属：FormData, File, Blob
+  // - Node 专属： Stream
+  let url = path;
   let requestBody = null;
   if (body) {
     if (method && method.toLowerCase() === "get") {
-      const urlParam = `?${encodeURLBody(body)}`;
-      url += urlParam;
+      const params = `?${encodeURLBody(body)}`;
+      url = url.concat(params);
+    } else if (
+      ["[object FormData]", "[object File]", "[object Blob]"].includes(
+        toStringTypeof(body)
+      )
+    ) {
+      requestBody = body;
     } else {
       requestBody = JSON.stringify(body);
     }

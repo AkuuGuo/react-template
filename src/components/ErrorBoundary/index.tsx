@@ -31,7 +31,9 @@ class ErrorBoundary extends Component<AppProps, AppState> {
     window.addEventListener(
       "error",
       (e) => {
-        console.log(e, "WebError=========>>>>>>>");
+        if (!e.isTrusted) {
+          console.log(e, "WebError=========>>>>>>>");
+        }
       },
       true
     );
