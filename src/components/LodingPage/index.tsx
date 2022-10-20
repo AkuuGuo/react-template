@@ -1,6 +1,6 @@
 import { memo } from "react";
 import { Property } from "csstype";
-import { loadingBlue } from "../../assets/images";
+import { loadingBlue } from "@/assets/images/global";
 
 interface Props {
   background?: string;

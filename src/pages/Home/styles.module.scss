@@ -1,6 +1,7 @@
 .App {
   text-align: center;
   width: 100%;
+  height: 100%;
 }
 
 .AppLogo {
@@ -16,7 +17,7 @@
 
 .AppHeader {
   background-color: #282c34;
-  min-height: 100vh;
+  min-height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;

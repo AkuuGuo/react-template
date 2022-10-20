@@ -1,7 +1,7 @@
 import classnames from "classnames";
 import * as React from "react";
 import Notification from "rmc-notification";
-import { iconLoading, iconFail, iconSuccess } from "../../assets/images";
+import { iconLoading, iconFail, iconSuccess } from "@/assets/images/global";
 import "./styles.scss";
 
 const SHORT = 3;

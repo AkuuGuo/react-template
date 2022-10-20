@@ -1,5 +1,5 @@
 import { Component, ErrorInfo } from "react";
-import { notFound } from "../../assets/images";
+import { notFound } from "@/assets/images/global";
 import { Redirect } from "react-router";
 import styles from "./styles.module.scss";
 

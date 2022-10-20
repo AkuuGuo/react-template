@@ -1,11 +1,3 @@
-/*
- * @Description: 😊
- * @Author: Gooyh
- * @Date: 2021-12-10 17:03:33
- * @LastEditors: Gooyh
- * @LastEditTime: 2021-12-13 10:32:18
- */
-
 export const SUCCEED = 0;
 
 // 内部错误码

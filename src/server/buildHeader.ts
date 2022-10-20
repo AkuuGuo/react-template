@@ -1,4 +1,5 @@
 import { RequestPayload } from ".";
+import { isSpecialBody } from "./tools";
 
 // 获取用户登录信息设置header
 function buildHeader(payload: RequestPayload) {
@@ -7,7 +8,7 @@ function buildHeader(payload: RequestPayload) {
     // 一些参数
   };
   // FormData格式的数据，不添加默认header头
-  if (Object.prototype.toString.call(body) !== "[object FormData]") {
+  if (!isSpecialBody(body)) {
     header["Content-Type"] = "application/json";
   }
   Object.assign(header, payloadHeader);

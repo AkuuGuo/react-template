@@ -1,10 +1,3 @@
-/*
- * @Description: 😊
- * @Author: Gooyh
- * @Date: 2021-12-10 10:12:32
- * @LastEditors: Gooyh
- * @LastEditTime: 2021-12-10 13:19:42
- */
 import { handleActions } from "redux-actions";
 import { LOGINSTATE } from "../actions";
 

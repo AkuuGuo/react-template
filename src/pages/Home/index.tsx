@@ -1,36 +1,26 @@
-/*
- * @Description: 😊
- * @Author: Gooyh
- * @Date: 2021-12-09 13:56:51
- * @LastEditors: Gooyh
- * @LastEditTime: 2022-05-16 10:12:11
- */
-
+import { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
 import { LOGIN, GETDEPTLIST } from "../../actions";
 import logo from "./logo.svg";
 import styles from "./styles.module.scss";
 
 const Home = (props: any) => {
   const dispatch = useDispatch();
-
-  const loginHandle = () => {
+  const history = useHistory();
+  const loginHandle = useCallback(() => {
     dispatch({
       type: LOGIN,
       payload: { loginState: true },
     });
-    dispatch({
-      type: GETDEPTLIST,
-      payload: {
-        callback: callback,
-      },
-    });
-    props.history.push("/login");
-  };
-
-  const callback = (res: any) => {
-    console.log("res", res);
-  };
+    // dispatch({
+    //   type: GETDEPTLIST,
+    //   payload: {
+    //     callback: () => {},
+    //   },
+    // })
+    history.push("/login");
+  }, [dispatch, history]);
 
   const store = useSelector((store) => store);
   console.log("store", store);
@@ -39,16 +29,16 @@ const Home = (props: any) => {
       <header className={styles.AppHeader}>
         <img src={logo} className={styles.AppLogo} alt="logo" />
         <p>
-          Edit <code>src/App.tsx</code> and save to reload.
+          <a
+            className={styles.AppLink}
+            href="https://reactjs.org"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            首页展示
+          </a>
         </p>
-        <a
-          className={styles.AppLink}
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <br />
         <button onClick={loginHandle}>立即登录</button>
       </header>
     </div>

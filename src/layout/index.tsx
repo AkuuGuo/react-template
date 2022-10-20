@@ -1,10 +1,3 @@
-/*
- * @Description: 😊
- * @Author: Gooyh
- * @Date: 2021-12-09 14:32:16
- * @LastEditors: Gooyh
- * @LastEditTime: 2021-12-10 09:48:41
- */
 import { renderRoutes, RouteConfigComponentProps } from "react-router-config";
 import { useLocation, Redirect } from "react-router";
 import ErrorBoundary from "../components/ErrorBoundary";

@@ -1,16 +1,9 @@
-/*
- * @Description: 😊
- * @Author: Gooyh
- * @Date: 2021-12-10 10:36:22
- * @LastEditors: Gooyh
- * @LastEditTime: 2021-12-13 10:38:39
- */
 import { call, put, takeEvery } from "@redux-saga/core/effects";
 import { Action } from "redux-actions";
 import { SagaAction } from ".";
 import fetchServerDataSaga, { Result, RequestPayload } from "../server";
 import { LOGIN, LOGINSTATE, GETDEPTLIST } from "../actions";
-import { getDeptList } from "../constants/api/home";
+import { getDeptList } from "../server/api/home";
 
 const fetch: any = (param: any) => {
   return new Promise((resolve) => {

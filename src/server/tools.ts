@@ -1,15 +1,22 @@
-/*
- * @Description: 😊
- * @Author: Gooyh
- * @Date: 2021-12-10 16:45:21
- * @LastEditors: Gooyh
- * @LastEditTime: 2022-06-09 10:20:41
- */
 import { AxiosError, AxiosRequestConfig } from "axios";
-import { map, get } from "lodash";
+import { map, get, includes } from "lodash";
 import { RequestPayload, Result } from ".";
 import { ErrorCode, SUCCEED, baseURL } from "../constants";
 import buildHeader from "./buildHeader";
+
+// 是否特殊body
+export const isSpecialBody = (body: any) => {
+  const specialBodyList = [
+    "[object FormData]",
+    "[object File]",
+    "[object Blob]",
+  ];
+  const prototypeStr = Object.prototype.toString.call(body);
+  if (includes(specialBodyList, prototypeStr)) {
+    return true;
+  }
+  return false;
+};
 
 // 处理get请求地址栏拼接
 export function encodeURLBody(body: any): string {
@@ -19,10 +26,6 @@ export function encodeURLBody(body: any): string {
   const urlParam = map(keys, (key) => `${key}=${body[key]}`).join("&");
   return urlParam;
 }
-
-const toStringTypeof = (data: unknown | [] | string): string => {
-  return Object.prototype.toString.call(data);
-};
 
 // 组装config
 export function assembleConfig(payload: RequestPayload): AxiosRequestConfig {
@@ -43,23 +46,19 @@ export function assembleConfig(payload: RequestPayload): AxiosRequestConfig {
     if (method && method.toLowerCase() === "get") {
       const params = `?${encodeURLBody(body)}`;
       url = url.concat(params);
-    } else if (
-      ["[object FormData]", "[object File]", "[object Blob]"].includes(
-        toStringTypeof(body)
-      )
-    ) {
+    } else if (isSpecialBody(body)) {
       requestBody = body;
     } else {
       requestBody = JSON.stringify(body);
     }
   }
+
   return {
     method: method || "post",
-    baseURL,
+    baseURL: baseURL,
     url,
     headers: {
       Accept: "application/json",
-      "Content-Type": "application/json",
       ...requestHeader,
     },
     data: requestBody,

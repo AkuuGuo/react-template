@@ -1,14 +1,7 @@
-/*
- * @Description: 😊
- * @Author: Gooyh
- * @Date: 2021-12-10 11:08:02
- * @LastEditors: Gooyh
- * @LastEditTime: 2022-05-24 16:58:45
- */
 import { call, delay, race } from "@redux-saga/core/effects";
 import axios, { AxiosError, AxiosStatic, Method } from "axios";
 import { get } from "lodash";
-import { assembleConfig, processErrMsg, parseResponse } from "./serverUtils";
+import { assembleConfig, processErrMsg, parseResponse } from "./tools";
 import { ErrorCode } from "../constants";
 import Toast from "../components/LoadingToast";
 

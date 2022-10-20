@@ -1,15 +1,9 @@
-/*
- * @Description: 😊
- * @Author: Gooyh
- * @Date: 2021-12-09 14:36:57
- * @LastEditors: Gooyh
- * @LastEditTime: 2021-12-13 09:39:04
- */
 import { lazy } from "react";
 import Layout from "./layout";
 import Home from "./pages/Home";
 
-const Login = lazy(() => import(/* webpackPrefetch: true */ "./pages/Login"));
+const Login = lazy(() => import("./pages/Login"));
+const NoMatch = lazy(() => import("./pages/404"));
 const routes = [
   {
     key: "layout",
@@ -29,6 +23,13 @@ const routes = [
         exact: true,
         component: Login,
         pathname: "登录页",
+      },
+      {
+        key: "noMath",
+        path: "*",
+        exact: true,
+        component: NoMatch,
+        pathname: "页面不存在",
       },
     ],
   },

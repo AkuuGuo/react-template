@@ -1,10 +1,3 @@
-/*
- * @Description: 😊
- * @Author: Gooyh
- * @Date: 2021-12-09 11:23:47
- * @LastEditors: Gooyh
- * @LastEditTime: 2022-06-09 10:16:26
- */
 import "react-app-polyfill/stable";
 import { Suspense } from "react";
 import ReactDOM from "react-dom";
@@ -16,6 +9,9 @@ import { Provider } from "react-redux";
 import LodingPage from "./components/LodingPage";
 import store from "./store";
 import "./global.css";
+
+import VConsole from "vconsole";
+new VConsole();
 
 const App = () => {
   return (
