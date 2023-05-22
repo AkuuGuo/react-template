@@ -1,72 +1,73 @@
 // 判断是否JSON格式字符串
-const getJSONType = (str: string): boolean => {
+export function getJSONType(str: string): boolean {
   let result = false;
   str = str.trim();
-  if (
-    (str.startsWith("{") && str.endsWith("}")) ||
-    (str.startsWith("[") && str.endsWith("]"))
-  ) {
+  if ((str.startsWith("{") && str.endsWith("}")) || (str.startsWith("[") && str.endsWith("]"))) {
     result = true;
   }
   return result;
-};
+}
 
-// 存储SessionStorage
-export const setSessionStorage = (key: string, value: any) => {
+// 存储Storage
+export function setStorage(key: string, value: any, isLocal = false): void {
   if (!key || typeof key !== "string") {
     console.log("传参错误：缺少必要参数key或key数据类型不为string");
     return;
   }
-  const stringifyType = ["[object Object]", "[object Array]"];
-  const valueType = Object.prototype.toString.call(value);
-  if (stringifyType.includes(valueType)) {
+
+  if (typeof value !== "string") {
     try {
       value = JSON.stringify(value);
     } catch (error) {
       console.log("JSON.stringify Error：", error);
     }
   }
-  sessionStorage.setItem(key, value);
-};
 
-// 获取SessionStorage
-export const getSessionStorage = (key: string, defaultVal = {}): any => {
+  const storage = isLocal ? localStorage : sessionStorage;
+  storage.setItem(key, value);
+}
+
+// 获取Storage
+export function getStorage(key: string, defaultVal = {}, isLocal = false): any {
   if (!key || typeof key !== "string") {
     console.log("传参错误：缺少必要参数key或key数据类型不为string");
     return;
   }
-  const value = sessionStorage.getItem(key) || "";
-  const isJSONType = getJSONType(value);
 
-  if (isJSONType) {
-    try {
-      const data = JSON.parse(value);
-      return data;
-    } catch (error: unknown) {
-      console.log("JSON.parse Error：", error);
-      return value;
-    }
+  const storage = isLocal ? localStorage : sessionStorage;
+  const value = storage.getItem(key);
+
+  if (!value) {
+    return defaultVal;
   }
-  return value || defaultVal;
-};
 
-// 删除SessionStorage
-export const removeSessionStorage = (key: string | string[]): void => {
+  try {
+    const data = JSON.parse(value);
+    return data;
+  } catch (error: unknown) {
+    return value;
+  }
+}
+
+// 删除Storage
+export function removeStorage(key: string | string[], isLocal = false): void {
   if (!key) {
     console.log("传参错误：缺少必要参数key");
     return;
   }
+
+  const storage = isLocal ? localStorage : sessionStorage;
   if (Array.isArray(key)) {
     key.forEach((item) => {
-      sessionStorage.removeItem(item);
+      storage.removeItem(item);
     });
     return;
   }
-  sessionStorage.removeItem(key);
-};
+  storage.removeItem(key);
+}
 
 // 解析地址栏参数
-export const getUrlParams = (urlSearch?: string) => {
+export function getUrlParams(urlSearch?: string) {
   let searchStr;
   if (typeof urlSearch === "undefined") {
     searchStr = window.location.href.split("?")[1] || ""; // 获取url中"?"符后的字符串
@@ -89,4 +90,55 @@ export const getUrlParams = (urlSearch?: string) => {
     paramsObj[key] = decodeURIComponent(value);
   });
   return paramsObj;
-};
+}
+
+// base64转blob
+export function dataURItoBlob(base64Data: string, type: string = "video/mp4"): Blob {
+  const strArr = base64Data.split(",");
+  const prefixStr = strArr[0];
+  let byteString = "";
+  let mimeString = type;
+  if (prefixStr.indexOf("base64") >= 0) {
+    byteString = strArr[1] || "";
+    const prefixStrArr = prefixStr.split(":");
+    const mimeStringWithSemicolon = prefixStrArr[1] || "";
+    mimeString = mimeStringWithSemicolon.split(";")[0];
+  } else {
+    byteString = decodeURIComponent(base64Data);
+  }
+
+  try {
+    byteString = atob(byteString);
+  } catch (error) {
+    console.log("atob error:", (error as Error).message);
+  }
+
+  var ia = new Uint8Array(byteString.length);
+  for (var i = 0; i < byteString.length; i++) {
+    ia[i] = byteString.charCodeAt(i);
+  }
+
+  const blob: any = new Blob([ia], { type: mimeString });
+  blob.lastModifiedDate = new Date();
+  blob.name = "blob";
+  return blob;
+}
+
+// blob转file
+export function blobToFile(blobData: Blob, type = "video/mp4", fileName?: string): File {
+  const date = new Date();
+  const localDate = date.toISOString().split("T")[0];
+  let timeDate = date.toTimeString().split(" ")[0];
+  timeDate = timeDate.replace(/:/g, ".");
+  const fileType = type.split("/")[1] || "";
+  const _fileName = fileName || `${localDate}T${timeDate}.${fileType}`;
+  const file = new File([blobData], _fileName, { type });
+  return file;
+}
+
+// base64转file
+export function base64ToFile(base64Url: string, type = "video/mp4", fileName?: string): File {
+  const blob = dataURItoBlob(base64Url, type);
+  const file = blobToFile(blob, type, fileName);
+  return file;
+}
